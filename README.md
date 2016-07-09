@@ -1,5 +1,7 @@
 # Zone-Swift
 
+Android版看这里  https://github.com/yunyeLoveYoona/Zone
+
 ios 文件型数据库
 
 Zone是一个文件型数据库，针对业务逻辑较简单以及数据量级较小的ios Application。
