@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222EE6D11D2F980A0005FB68 /* TestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EE6D01D2F980A0005FB68 /* TestModel.swift */; };
 		22B322221D2F451400BD63CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322211D2F451400BD63CF /* AppDelegate.swift */; };
 		22B322241D2F451400BD63CF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322231D2F451400BD63CF /* ViewController.swift */; };
 		22B322271D2F451400BD63CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B322251D2F451400BD63CF /* Main.storyboard */; };
@@ -14,6 +15,9 @@
 		22B3222C1D2F451400BD63CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22B3222A1D2F451400BD63CF /* LaunchScreen.storyboard */; };
 		22B322371D2F451400BD63CF /* Zone_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322361D2F451400BD63CF /* Zone_SwiftTests.swift */; };
 		22B322421D2F451400BD63CF /* Zone_SwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322411D2F451400BD63CF /* Zone_SwiftUITests.swift */; };
+		22B322511D2F454D00BD63CF /* FileUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322501D2F454D00BD63CF /* FileUtil.swift */; };
+		22B322531D2F56C200BD63CF /* Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322521D2F56C200BD63CF /* Zone.swift */; };
+		22B322551D2F576F00BD63CF /* ZoneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322541D2F576F00BD63CF /* ZoneModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		222EE6D01D2F980A0005FB68 /* TestModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestModel.swift; sourceTree = "<group>"; };
 		22B3221E1D2F451400BD63CF /* Zone-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Zone-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B322211D2F451400BD63CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B322231D2F451400BD63CF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +52,9 @@
 		22B3223D1D2F451400BD63CF /* Zone-SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Zone-SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B322411D2F451400BD63CF /* Zone_SwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zone_SwiftUITests.swift; sourceTree = "<group>"; };
 		22B322431D2F451400BD63CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22B322501D2F454D00BD63CF /* FileUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtil.swift; sourceTree = "<group>"; };
+		22B322521D2F56C200BD63CF /* Zone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zone.swift; sourceTree = "<group>"; };
+		22B322541D2F576F00BD63CF /* ZoneModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +105,14 @@
 		22B322201D2F451400BD63CF /* Zone-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				22B3224F1D2F451800BD63CF /* core */,
 				22B322211D2F451400BD63CF /* AppDelegate.swift */,
 				22B322231D2F451400BD63CF /* ViewController.swift */,
 				22B322251D2F451400BD63CF /* Main.storyboard */,
 				22B322281D2F451400BD63CF /* Assets.xcassets */,
 				22B3222A1D2F451400BD63CF /* LaunchScreen.storyboard */,
 				22B3222D1D2F451400BD63CF /* Info.plist */,
+				222EE6D01D2F980A0005FB68 /* TestModel.swift */,
 			);
 			path = "Zone-Swift";
 			sourceTree = "<group>";
@@ -123,6 +133,16 @@
 				22B322431D2F451400BD63CF /* Info.plist */,
 			);
 			path = "Zone-SwiftUITests";
+			sourceTree = "<group>";
+		};
+		22B3224F1D2F451800BD63CF /* core */ = {
+			isa = PBXGroup;
+			children = (
+				22B322501D2F454D00BD63CF /* FileUtil.swift */,
+				22B322521D2F56C200BD63CF /* Zone.swift */,
+				22B322541D2F576F00BD63CF /* ZoneModel.swift */,
+			);
+			name = core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +279,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B322511D2F454D00BD63CF /* FileUtil.swift in Sources */,
+				22B322551D2F576F00BD63CF /* ZoneModel.swift in Sources */,
+				22B322531D2F56C200BD63CF /* Zone.swift in Sources */,
+				222EE6D11D2F980A0005FB68 /* TestModel.swift in Sources */,
 				22B322241D2F451400BD63CF /* ViewController.swift in Sources */,
 				22B322221D2F451400BD63CF /* AppDelegate.swift in Sources */,
 			);
@@ -485,6 +509,7 @@
 				22B322481D2F451400BD63CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		22B322491D2F451400BD63CF /* Build configuration list for PBXNativeTarget "Zone-SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -493,6 +518,7 @@
 				22B3224B1D2F451400BD63CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		22B3224C1D2F451400BD63CF /* Build configuration list for PBXNativeTarget "Zone-SwiftUITests" */ = {
 			isa = XCConfigurationList;
@@ -501,6 +527,7 @@
 				22B3224E1D2F451400BD63CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
