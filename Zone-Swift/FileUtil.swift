@@ -24,11 +24,12 @@ class FileUtil {
         return userDirPath
     }
     
-    static func createFile(userName : String,fileName : String){
+    static func createFile(userName : String,fileName : String) -> String{
         let filePath = "\(NSHomeDirectory())/Documents/\(userName)/\(fileName)"
         if(!NSFileManager.defaultManager().fileExistsAtPath(filePath)){
              NSFileManager.defaultManager().createFileAtPath(filePath, contents: nil, attributes: nil)
         }
+        return filePath
     }
     
     /**获取用户文件夹下的所有文件**/
@@ -81,21 +82,28 @@ class FileUtil {
     
     
     static func deleteLine(lineNum : Int,filePath : String){
+        let path = "\(NSHomeDirectory())/Documents/\(Zone._this.userName)/\(filePath)"
         let oldContent = read(filePath,userName: Zone._this.userName)
-        let modelStrList = oldContent.componentsSeparatedByString("\(FileUtil.END)")
+        var modelStrList = oldContent.componentsSeparatedByString("\(FileUtil.END)")
+        modelStrList.removeLast()
         var newContent = ""
         var num = 0
         for modelString in modelStrList{
             num = num + 1
             if( num != lineNum){
-                newContent = "\(newContent)\(modelString)"
+                newContent = "\(newContent)\(modelString)\(FileUtil.END)"
             }
-            
-            let fileHandler = NSFileHandle(forWritingAtPath: filePath)
-            fileHandler?.seekToFileOffset(0)
-            fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
-            fileHandler?.closeFile()
         }
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(path)
+        }catch{
+            
+        }
+        createFile(Zone._this.userName, fileName: filePath)
+        let fileHandler = NSFileHandle(forWritingAtPath: path)
+        fileHandler?.seekToFileOffset(0)
+        fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
+        fileHandler?.closeFile()
         
     }
     

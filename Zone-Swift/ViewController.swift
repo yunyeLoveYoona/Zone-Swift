@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var msg: UILabel!
+    @IBOutlet weak var delete: UIButton!
     @IBOutlet weak var add: UIButton!
     
     @IBOutlet weak var update: UIButton!
@@ -26,6 +28,8 @@ class ViewController: UIViewController {
         findAll.addTarget(self, action: #selector(ViewController.find), forControlEvents: UIControlEvents.TouchUpInside)
         
         update.addTarget(self, action: #selector(ViewController.updateModel), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        delete.addTarget(self, action: #selector(ViewController.deleteModel), forControlEvents: UIControlEvents.TouchUpInside)
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,7 +57,7 @@ class ViewController: UIViewController {
                 (modelList[modelList.count - 1] as! TestModel).name = "updateModel"
                 try (modelList[modelList.count - 1] as! TestModel).saveOrUpdate()
             }
-            update.setTitle("更新成功", forState: UIControlState.Normal)
+            msg.text = "更新成功"
         }catch{
             
         }
@@ -62,7 +66,22 @@ class ViewController: UIViewController {
     func find(){
         do{
             let modelList = try Zone.findAll(NSStringFromClass(TestModel.classForCoder()))
-            findAll.setTitle("当前数据量：\(modelList.count)", forState: UIControlState.Normal)
+            msg.text = "当前数据量：\(modelList.count)"
+        }catch{
+            
+        }
+    }
+    
+    
+    func deleteModel(){
+        do{
+            let modelList = try Zone.findAll(NSStringFromClass(TestModel.classForCoder()))
+            if modelList.count > 1{
+                let model = modelList[modelList.count - 2]
+                if try (model as! TestModel).del(){
+                    msg.text = "删除成功"
+                }
+            }
         }catch{
             
         }

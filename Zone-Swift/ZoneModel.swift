@@ -55,4 +55,15 @@ class ZoneModel: NSObject {
         
     }
     
+    func del()throws -> Bool {
+        if defaultKey == nil || lineNum == 0{
+            return false
+        }
+        if try Zone.delete(NSStringFromClass(classForCoder), model: self){
+            FileUtil.deleteLine(lineNum, filePath:  NSStringFromClass(classForCoder))
+        }
+        
+        return true
+    }
+    
 }

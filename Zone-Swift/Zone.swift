@@ -133,7 +133,11 @@ class Zone {
             }
             i = i + 1
         }
-        
+        if temp != nil{
+            model.lineNum = temp.count + 1
+        }else{
+            model.lineNum = 1
+        }
         if temp == nil{
             temp = Array<ZoneModel>()
             temp.append(model)
@@ -174,6 +178,32 @@ class Zone {
             }
         }
         return temp
+    }
+    
+    
+    static func delete(className : String,model : ZoneModel)throws -> Bool{
+        try checkThis()
+        if let _ = find(className, model: model){
+            var num : Int = 0
+            var modelList : Array<ZoneModel>!
+            var i = 0
+            for dictionary in _this.dataCache {
+                if dictionary[className] != nil{
+                    modelList = dictionary[className]
+                    modelList.removeAtIndex(model.lineNum - 1)
+                    for zoneModel in modelList {
+                        if(zoneModel.lineNum > model.lineNum){
+                            zoneModel.lineNum = zoneModel.lineNum - 1
+                        }
+                    }
+                    num = i
+                }
+                i = i + 1
+            }
+            (_this.dataCache[num])[className] = modelList
+            return true
+        }
+        return false
     }
     
 
