@@ -11,4 +11,5 @@ class TestModel: ZoneModel {
     var name : String!
     var birthday : NSDate!
     var age : Int = 0
+    var model : TestModel2!
 }

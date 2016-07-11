@@ -67,12 +67,24 @@ class FileUtil {
         for modelString in modelStrList{
             num = num + 1
             if( num == lineNum){
-                newContent = "\(newContent)\(content)\(FileUtil.END)"
+                newContent = "\(newContent)\(content)"
+                if num != modelStrList.count{
+                    newContent = "\(newContent)\(FileUtil.END)"
+                }
             }else{
                 newContent = "\(newContent)\(modelString)"
+                if num != modelStrList.count{
+                    newContent = "\(newContent)\(FileUtil.END)"
+                }
             }
             
         }
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(path)
+        }catch{
+            
+        }
+        createFile(Zone._this.userName, fileName: filePath)
         let fileHandler = NSFileHandle(forWritingAtPath: path)
         fileHandler?.seekToFileOffset(0)
         fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -91,7 +103,10 @@ class FileUtil {
         for modelString in modelStrList{
             num = num + 1
             if( num != lineNum){
-                newContent = "\(newContent)\(modelString)\(FileUtil.END)"
+                newContent = "\(newContent)\(modelString)"
+                if num != modelStrList.count{
+                    newContent = "\(newContent)\(FileUtil.END)"
+                }
             }
         }
         do {

@@ -54,9 +54,8 @@ class Zone {
         if(files != nil && files.count > 0){
             for file in files{
                 _this.lineNum = 1
-                var modelStrList = FileUtil.read(file,userName: _this.userName).componentsSeparatedByString("\(FileUtil.END)")
+                let modelStrList = FileUtil.read(file,userName: _this.userName).componentsSeparatedByString("\(FileUtil.END)")
                 var zoneModels = Array<ZoneModel>()
-                modelStrList.removeLast()
                 for modelStr in modelStrList {
                     if let model = getModel(file, modelStr: modelStr){
                         zoneModels.append(model)
@@ -70,31 +69,45 @@ class Zone {
     
     
     private static func getModel(modelName : String,modelStr : String) -> ZoneModel!{
-        let s :Character = ":"
-        let zoneModel = (NSClassFromString(modelName) as! ZoneModel.Type).init()
-        let mirror = Mirror(reflecting: zoneModel)
-        let keyValues = modelStr.componentsSeparatedByString(",")
-        let superMirror = mirror.superclassMirror()
-        for keyValue in keyValues {
-            let key = keyValue.substring(0, keyValue.lastIndexOf(s))
-            var value = keyValue.substring(keyValue.lastIndexOf(s) + 1,NSString(string: keyValue).length)
-            value = value.stringByReplacingOccurrencesOfString("%^", withString: ":")
-            value = value.stringByReplacingOccurrencesOfString("%&", withString: ",")
-            for case let (label, _ ) in mirror.children {
-                if(key == label){
-                     zoneModel.setValue(value, forKey: key)
+        if NSString(string: modelStr).length > 1{
+            let s :Character = ":"
+            let zoneModel = (NSClassFromString(modelName) as! ZoneModel.Type).init()
+            let mirror = Mirror(reflecting: zoneModel)
+            let keyValues = modelStr.componentsSeparatedByString(",")
+            let superMirror = mirror.superclassMirror()
+            for keyValue in keyValues {
+                let key = keyValue.substring(0, keyValue.lastIndexOf(s))
+                var value = keyValue.substring(keyValue.lastIndexOf(s) + 1,NSString(string: keyValue).length)
+                value = value.stringByReplacingOccurrencesOfString("%^", withString: ":")
+                value = value.stringByReplacingOccurrencesOfString("%&", withString: ",")
+                for case let (label, _ ) in mirror.children {
+                    if(key == label){
+                        if value.containsString("!$"){
+                            let className = value.substring(value.lastIndexOf("$") + 1, NSString(string: value).length)
+                            let modelStr = value.substring(0, value.lastIndexOf("$") - 1)
+                            let model = (NSClassFromString(className) as! ZoneModel.Type).init()
+                            (model as! ZoneModelHelper).fromString(modelStr)
+                            zoneModel.setValue(model, forKey: key)
+                        }else{
+                            zoneModel.setValue(value, forKey: key)
+                        }
+                        
+                    }
                 }
-            }
-            for case let (label, _ ) in superMirror!.children {
-                if(key == label){
-                    zoneModel.setValue(value, forKey: key)
+                for case let (label, _ ) in superMirror!.children {
+                    if(key == label){
+                        zoneModel.setValue(value, forKey: key)
+                    }
                 }
+                zoneModel.setValue(_this.lineNum, forKey: "lineNum")
+                
             }
-            zoneModel.setValue(_this.lineNum, forKey: "lineNum")
-            
+            _this.lineNum = _this.lineNum + 1
+            return zoneModel
+
         }
-        _this.lineNum = _this.lineNum + 1
-        return zoneModel
+        
+        return nil
     }
     
     
@@ -206,7 +219,229 @@ class Zone {
         return false
     }
     
+    
+    static func limit(start : Int,end : Int,className : String)throws -> Array<ZoneModel>{
+        try checkThis()
+        var temp = Array<ZoneModel>()
+        for dictionary in _this.dataCache {
+            if let modelList = dictionary[className]{
+                var i = 0
+                for model in modelList {
+                    if i < end && i >= start{
+                        temp.append(model)
+                    }
+                    i = i + 1
+                }
+            }
+        }
+        return temp
+    }
+    
+    static func selectWhere(whereCondition : WhereCondition,className : String,fieldName : String,value : AnyObject)throws -> Array<ZoneModel>! {
+        return  try selectWhere(findAll(className), whereCondition: whereCondition, className: className, fieldName: fieldName, value: value)
+        
+    }
+    
+    static func selectWhere(zoneModels : Array<ZoneModel>,whereCondition : WhereCondition,className : String,fieldName : String,value : AnyObject) -> Array<ZoneModel>! {
+        let zoneModel = (NSClassFromString(className) as! ZoneModel.Type).init()
+        let mirror = Mirror(reflecting: zoneModel)
+        var tempField : String!
+        for (label, _ ) in mirror.children  {
+            if label == fieldName{
+                tempField = label
+                break
+            }
+        }
+        if tempField != nil{
+            var temp : Array<ZoneModel> =  Array<ZoneModel>()
+            for zoneModel in zoneModels {
+                let mirror = Mirror(reflecting: zoneModel)
+                switch whereCondition {
+                case .EQUALS:
+                    for (label, v ) in mirror.children  {
+                        if label == fieldName{
+                            if let fieldValue = (v as? AnyObject){
+                                if fieldValue is Int{
+                                    if Int(fieldValue as! NSNumber) == Int(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Float{
+                                    if Float(fieldValue as! NSNumber) == Float(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Double{
+                                    if Double(fieldValue as! NSNumber) == Double(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is String{
+                                    if String(fieldValue) == String(value){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Bool{
+                                    if Bool(fieldValue as! NSNumber) == Bool(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is NSDate{
+                                    if (fieldValue as! NSDate).isEqualToDate(v as! NSDate){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is ZoneModelHelper{
+                                    if (fieldValue as! ZoneModelHelper).equals(fieldValue as! ZoneModelHelper, model2: value as! ZoneModelHelper){
+                                        temp.append(zoneModel)
+                                    }
+                                }
 
+                            }
+                            break
+                        }
+                    }
+                case .CONTAINS:
+                    if value is String{
+                        for (label, v ) in mirror.children  {
+                            if label == fieldName{
+                                if value.containsString(v as! String){
+                                    temp.append(zoneModel)
+                                }
+                            }
+                        }
+                    }
+                case .AFTER:
+                    if value is NSDate{
+                        for (label, v ) in mirror.children  {
+                            if label == fieldName{
+                                if (value as! NSDate).isEqualToDate((value as! NSDate).laterDate(v as! NSDate)){
+                                    temp.append(zoneModel)
+                                }
+                            }
+                        }
+
+                    }
+                case .BEFORE:
+                    if value is NSDate{
+                        for (label, v ) in mirror.children  {
+                            if label == fieldName{
+                                if (value as! NSDate).isEqualToDate((value as! NSDate).earlierDate(v as! NSDate)){
+                                    temp.append(zoneModel)
+                                }
+                            }
+                        }
+                        
+                    }
+                case .LESS_THAN:
+                    for (label, v ) in mirror.children  {
+                        if label == fieldName{
+                            if let fieldValue = (v as? AnyObject){
+                                if fieldValue is Int{
+                                    if Int(fieldValue as! NSNumber) < Int(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Float{
+                                    if Float(fieldValue as! NSNumber) < Float(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Double{
+                                    if Double(fieldValue as! NSNumber) < Double(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is String{
+                                    if String(fieldValue) < String(value){
+                                        temp.append(zoneModel)
+                                    }
+                                }
+                            }
+                            break
+                        }
+                    }
+                case .MORE_THAN:
+                    for (label, v ) in mirror.children  {
+                        if label == fieldName{
+                            if let fieldValue = (v as? AnyObject){
+                                if fieldValue is Int{
+                                    if Int(fieldValue as! NSNumber) > Int(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Float{
+                                    if Float(fieldValue as! NSNumber) > Float(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is Double{
+                                    if Double(fieldValue as! NSNumber) > Double(value as! NSNumber){
+                                        temp.append(zoneModel)
+                                    }
+                                }else if fieldValue is String{
+                                    if String(fieldValue) > String(value){
+                                        temp.append(zoneModel)
+                                    }
+                                }
+                            }
+                            break
+                        }
+                    }
+                }
+            }
+            
+            return temp
+        }
+        
+        return nil
+    }
+    
+    static func orderBy(className : String,sortField : String,sordMode : SortMode)throws -> Array<ZoneModel>!{
+        var modelList = try findAll(className)
+        modelList.sortInPlace { (model1 :ZoneModel, model2 :ZoneModel) -> Bool in
+            let value1,value2 : AnyObject!
+            value1 = getValue(model1,fieldName: sortField)
+            value2 = getValue(model2,fieldName: sortField)
+            if value1 != nil && value2 != nil{
+                if value1 is Int{
+                    if sordMode == SortMode.ASC{
+                        return Int(value1 as! NSNumber) < Int(value2 as! NSNumber)
+                    }else{
+                        return Int(value1 as! NSNumber) >= Int(value2 as! NSNumber)
+                    }
+                }else if value1 is Float{
+                    if sordMode == SortMode.ASC{
+                        return Float(value1 as! NSNumber) < Float(value2 as! NSNumber)
+                    }else{
+                        return Float(value1 as! NSNumber) >= Float(value2 as! NSNumber)
+                    }
+                }else if value1 is Double{
+                    if sordMode == SortMode.ASC{
+                        return Double(value1 as! NSNumber) < Double(value2 as! NSNumber)
+                    }else{
+                        return Double(value1 as! NSNumber) >= Double(value2 as! NSNumber)
+                    }
+                }else if value1 is String{
+                    if sordMode == SortMode.ASC{
+                        return String(value1) < String(value2)
+                    }else{
+                        return String(value1) >= String(value2)
+                    }
+                }else if value1 is NSDate{
+                    if sordMode == SortMode.ASC{
+                        return  (value1 as! NSDate).isEqualToDate((value1 as! NSDate).earlierDate(value2 as! NSDate))
+                    }else{
+                         return  (value1 as! NSDate).isEqualToDate((value1 as! NSDate).laterDate(value2 as! NSDate))
+                    }
+                }
+                
+            }
+            return false
+        }
+        return modelList
+        
+    }
+
+    
+    private static func getValue(model : ZoneModel,fieldName : String)-> AnyObject!{
+        let mirror = Mirror(reflecting: model)
+        for (label, v ) in mirror.children  {
+            if label == fieldName{
+                return v as! AnyObject
+            }
+        }
+        return nil
+    }
     
     
     
@@ -244,4 +479,12 @@ extension String : ErrorType{
         
     }
     
+}
+
+enum WhereCondition {
+    case EQUALS,BEFORE,AFTER,CONTAINS,MORE_THAN,LESS_THAN
+}
+
+enum SortMode {
+    case ASC,DESC
 }

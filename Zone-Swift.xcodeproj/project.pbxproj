@@ -18,6 +18,8 @@
 		22B322511D2F454D00BD63CF /* FileUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322501D2F454D00BD63CF /* FileUtil.swift */; };
 		22B322531D2F56C200BD63CF /* Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322521D2F56C200BD63CF /* Zone.swift */; };
 		22B322551D2F576F00BD63CF /* ZoneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B322541D2F576F00BD63CF /* ZoneModel.swift */; };
+		22CFD9BB1D33676F00D94C6B /* ZoneModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CFD9BA1D33676F00D94C6B /* ZoneModelHelper.swift */; };
+		22CFD9BD1D33808300D94C6B /* TestModel2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CFD9BC1D33808300D94C6B /* TestModel2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		22B322501D2F454D00BD63CF /* FileUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtil.swift; sourceTree = "<group>"; };
 		22B322521D2F56C200BD63CF /* Zone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zone.swift; sourceTree = "<group>"; };
 		22B322541D2F576F00BD63CF /* ZoneModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneModel.swift; sourceTree = "<group>"; };
+		22CFD9BA1D33676F00D94C6B /* ZoneModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneModelHelper.swift; sourceTree = "<group>"; };
+		22CFD9BC1D33808300D94C6B /* TestModel2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestModel2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 				22B3222A1D2F451400BD63CF /* LaunchScreen.storyboard */,
 				22B3222D1D2F451400BD63CF /* Info.plist */,
 				222EE6D01D2F980A0005FB68 /* TestModel.swift */,
+				22CFD9BC1D33808300D94C6B /* TestModel2.swift */,
 			);
 			path = "Zone-Swift";
 			sourceTree = "<group>";
@@ -141,6 +146,7 @@
 				22B322501D2F454D00BD63CF /* FileUtil.swift */,
 				22B322521D2F56C200BD63CF /* Zone.swift */,
 				22B322541D2F576F00BD63CF /* ZoneModel.swift */,
+				22CFD9BA1D33676F00D94C6B /* ZoneModelHelper.swift */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -279,11 +285,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CFD9BB1D33676F00D94C6B /* ZoneModelHelper.swift in Sources */,
 				22B322511D2F454D00BD63CF /* FileUtil.swift in Sources */,
 				22B322551D2F576F00BD63CF /* ZoneModel.swift in Sources */,
 				22B322531D2F56C200BD63CF /* Zone.swift in Sources */,
 				222EE6D11D2F980A0005FB68 /* TestModel.swift in Sources */,
 				22B322241D2F451400BD63CF /* ViewController.swift in Sources */,
+				22CFD9BD1D33808300D94C6B /* TestModel2.swift in Sources */,
 				22B322221D2F451400BD63CF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

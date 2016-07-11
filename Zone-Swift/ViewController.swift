@@ -10,10 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var sort: UIButton!
+    @IBOutlet weak var equals: UIButton!
     @IBOutlet weak var msg: UILabel!
     @IBOutlet weak var delete: UIButton!
     @IBOutlet weak var add: UIButton!
     
+    @IBOutlet weak var limit: UIButton!
     @IBOutlet weak var update: UIButton!
     
     @IBOutlet weak var findAll: UIButton!
@@ -30,6 +33,11 @@ class ViewController: UIViewController {
         update.addTarget(self, action: #selector(ViewController.updateModel), forControlEvents: UIControlEvents.TouchUpInside)
         
         delete.addTarget(self, action: #selector(ViewController.deleteModel), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        limit.addTarget(self, action: #selector(ViewController.limitModel), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        equals.addTarget(self, action: #selector(ViewController.equalsSelect), forControlEvents: UIControlEvents.TouchUpInside)
+        sort.addTarget(self, action: #selector(ViewController.sortModel), forControlEvents: UIControlEvents.TouchUpInside)
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,6 +51,8 @@ class ViewController: UIViewController {
         testModel.age = i * 10
         testModel.birthday = NSDate()
         testModel.name = "testModel"
+        testModel.model = TestModel2()
+        testModel.model.money = 11
         do{
             try testModel.saveOrUpdate()
         }catch{
@@ -72,6 +82,16 @@ class ViewController: UIViewController {
         }
     }
     
+    func limitModel(){
+        do{
+            let modelList = try Zone.limit(0, end: 10, className: NSStringFromClass(TestModel.classForCoder()))
+            msg.text = "limit数据量：\(modelList.count)"
+        }catch{
+            
+        }
+    }
+    
+    
     
     func deleteModel(){
         do{
@@ -85,6 +105,25 @@ class ViewController: UIViewController {
         }catch{
             
         }
+    }
+    
+    func equalsSelect(){
+        do{
+            if let modelList = try Zone.selectWhere(WhereCondition.EQUALS, className: NSStringFromClass(TestModel.classForCoder()), fieldName: "name", value: "testModel"){
+                    msg.text = "equals查询到：\(modelList.count)"
+            }
+        }catch{
+            
+        }
+    }
+    
+    func sortModel() {
+        do{
+            try Zone.orderBy(NSStringFromClass(TestModel.classForCoder()), sortField: "age", sordMode: SortMode.DESC)
+        }catch{
+            
+        }
+        msg.text = "排序成功"
     }
 
 }

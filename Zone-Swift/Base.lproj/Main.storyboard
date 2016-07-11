@@ -19,7 +19,7 @@
                                 <state key="normal" title="添加一个TestModel"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2ic-or-waX">
-                                <rect key="frame" x="91" y="172" width="135" height="30"/>
+                                <rect key="frame" x="97" y="269" width="135" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="获取当前数据量"/>
                             </button>
@@ -34,20 +34,38 @@
                                 <state key="normal" title="删除一个TestModel"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z7W-EG-dTc">
-                                <rect key="frame" x="91" y="20" width="135" height="21"/>
+                                <rect key="frame" x="54" y="20" width="214" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="A4h-2G-NCz">
+                                <rect key="frame" x="94" y="179" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="limit 1-10"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Xku-Iy-WQw">
+                                <rect key="frame" x="77" y="207" width="168" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="equals查询"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mmJ-3A-gMw">
+                                <rect key="frame" x="76" y="237" width="168" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="排序"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="add" destination="7dI-X4-dDu" id="FPm-jH-XJB"/>
                         <outlet property="delete" destination="XlZ-QU-p3I" id="Z8a-DX-GAt"/>
+                        <outlet property="equals" destination="Xku-Iy-WQw" id="HDe-cc-mVu"/>
                         <outlet property="findAll" destination="2ic-or-waX" id="bO6-lH-TQS"/>
+                        <outlet property="limit" destination="A4h-2G-NCz" id="CpC-ac-6MG"/>
                         <outlet property="msg" destination="Z7W-EG-dTc" id="Qc1-Mq-BoT"/>
+                        <outlet property="sort" destination="mmJ-3A-gMw" id="w4c-rN-hM6"/>
                         <outlet property="update" destination="FE9-VB-XKt" id="j5i-D5-pte"/>
                     </connections>
                 </viewController>
