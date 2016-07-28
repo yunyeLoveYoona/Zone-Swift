@@ -12,7 +12,8 @@ class Zone {
     static var _this : Zone!
     var dataCache : Array<Dictionary<String,Array<ZoneModel>>>!
     var lineNum : Int!
-
+    var maxNum = 0
+    var lock : NSLock!
     
     private convenience init(){
         self.init(userName: "default")
@@ -21,6 +22,7 @@ class Zone {
     private init(userName : String){
         self.userName = userName
         lineNum = 1
+        lock = NSLock()
     }
     
     static func initZone(){
@@ -112,6 +114,7 @@ class Zone {
     
     
     static func saveorUpdate(className : String,model : ZoneModel) throws{
+        _this.lock.lock()
         try checkThis()
         let zoneModel = find(className, model: model)
         if zoneModel == nil{
@@ -119,6 +122,7 @@ class Zone {
         }else{
             update(className, oldModel: zoneModel, model: model)
         }
+        _this.lock.unlock()
     }
     
     private static func find(className : String,model : ZoneModel) -> ZoneModel!{
@@ -159,6 +163,14 @@ class Zone {
             temp.append(model)
             
         }
+        
+        if _this.maxNum > 0 && model.lineNum > _this.maxNum{
+            temp.removeAtIndex(0)
+            for tempModel in temp {
+                tempModel.lineNum = tempModel.lineNum - 1
+            }
+            FileUtil.deleteLine(0, filePath: NSStringFromClass(model.classForCoder))
+        }
         _this.dataCache.append([className : temp])
     
     }
@@ -196,6 +208,7 @@ class Zone {
     
     static func delete(className : String,model : ZoneModel)throws -> Bool{
         try checkThis()
+        _this.lock.lock()
         if let _ = find(className, model: model){
             var num : Int = 0
             var modelList : Array<ZoneModel>!
@@ -214,8 +227,10 @@ class Zone {
                 i = i + 1
             }
             (_this.dataCache[num])[className] = modelList
+            _this.lock.unlock()
             return true
         }
+        _this.lock.unlock()
         return false
     }
     

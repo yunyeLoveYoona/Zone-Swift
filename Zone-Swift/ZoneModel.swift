@@ -11,9 +11,11 @@ class ZoneModel: NSObject {
     var defaultKey : String!
     var lineNum : Int
     
+    
     override required init() {
         print("init")
         lineNum = 0
+        
     }
     
     func saveOrUpdate() throws{
