@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         
         equals.addTarget(self, action: #selector(ViewController.equalsSelect), forControlEvents: UIControlEvents.TouchUpInside)
         sort.addTarget(self, action: #selector(ViewController.sortModel), forControlEvents: UIControlEvents.TouchUpInside)
-        Zone._this.maxNum = 10
     }
 
     override func didReceiveMemoryWarning() {

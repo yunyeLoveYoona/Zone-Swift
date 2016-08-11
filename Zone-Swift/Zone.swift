@@ -56,14 +56,24 @@ class Zone {
         if(files != nil && files.count > 0){
             for file in files{
                 _this.lineNum = 1
-                let modelStrList = FileUtil.read(file,userName: _this.userName).componentsSeparatedByString("\(FileUtil.END)")
-                var zoneModels = Array<ZoneModel>()
-                for modelStr in modelStrList {
-                    if let model = getModel(file, modelStr: modelStr){
-                        zoneModels.append(model)
+                let modelStrs = FileUtil.read(file,userName: _this.userName)
+                let modelStrList = modelStrs.componentsSeparatedByString("\(FileUtil.END)")
+                if NSString(string:modelStrs).length  > NSString(string:FileUtil.END).length {
+                    if modelStrs.substring(NSString(string:modelStrs).length - NSString(string:FileUtil.END).length - 1, NSString(string:modelStrs).length - 1) == FileUtil.END
+                    {
+                       
+                        var zoneModels = Array<ZoneModel>()
+                        for modelStr in modelStrList {
+                            if let model = getModel(file, modelStr: modelStr){
+                                zoneModels.append(model)
+                            }
+                        }
+                        _this.dataCache.append([file: zoneModels])
                     }
+                
+                }else{
+                    FileUtil.deleteLine(modelStrList.count, filePath:  file)
                 }
-                _this.dataCache.append([file: zoneModels])
             }
         }
         
