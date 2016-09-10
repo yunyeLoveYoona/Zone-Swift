@@ -4,6 +4,10 @@ Android版看这里  https://github.com/yunyeLoveYoona/Zone
 
 ios 文件型数据库
 
+支持ios8.0以上，引用：
+pod 'Zone', '~> 1.0.3'
+
+
 Zone是一个文件型数据库，针对业务逻辑较简单以及数据量级较小的ios Application。
 
 Zone通过文件来存储数据，并且根据用户信息提供了不同的存储，使所有用户的数据都互相隔离。Zend通过对Model的反射来存储和读取数据
