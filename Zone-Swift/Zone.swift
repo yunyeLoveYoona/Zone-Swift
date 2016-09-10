@@ -59,7 +59,7 @@ class Zone {
                 let modelStrs = FileUtil.read(file,userName: _this.userName)
                 let modelStrList = modelStrs.componentsSeparatedByString("\(FileUtil.END)")
                 if NSString(string:modelStrs).length  > NSString(string:FileUtil.END).length {
-                    if modelStrs.substring(NSString(string:modelStrs).length - NSString(string:FileUtil.END).length - 1, NSString(string:modelStrs).length - 1) == FileUtil.END
+                    if modelStrs.substring(NSString(string:modelStrs).length - NSString(string:FileUtil.END).length, NSString(string:modelStrs).length) == FileUtil.END
                     {
                        
                         var zoneModels = Array<ZoneModel>()
