@@ -9,7 +9,7 @@
 import Foundation
 class TestModel: ZoneModel {
     var name : String!
-    var birthday : NSDate!
+    var birthday : Date!
     var age : Int = 0
     var model : TestModel2!
 }

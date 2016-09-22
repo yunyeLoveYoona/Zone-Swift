@@ -9,10 +9,10 @@
 import Foundation
 
 protocol ZoneModelHelper{
-    func equals(model1 : ZoneModelHelper,model2 :ZoneModelHelper) -> Bool
+    func equals(_ model1 : ZoneModelHelper,model2 :ZoneModelHelper) -> Bool
     
     func toString() -> String
     
-    func fromString(modelStr : String)
+    func fromString(_ modelStr : String)
     
 }

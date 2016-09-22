@@ -14,11 +14,11 @@ class TestModel2 :ZoneModel, ZoneModelHelper{
         return "\(money)"
     }
     
-    func fromString(modelStr : String) {
+    func fromString(_ modelStr : String) {
         money = Float(modelStr)
     }
     
-    func equals(model1: ZoneModelHelper, model2: ZoneModelHelper) -> Bool {
+    func equals(_ model1: ZoneModelHelper, model2: ZoneModelHelper) -> Bool {
         return false
     }
 }

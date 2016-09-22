@@ -11,11 +11,11 @@ class FileUtil {
     static let END = "-end-"
     
     
-    static func createDir(userName : String) -> String!{
+    static func createDir(_ userName : String) -> String!{
         let userDirPath = "\(NSHomeDirectory())/Documents/\(userName)"
-        if(!NSFileManager.defaultManager().fileExistsAtPath(userDirPath)){
+        if(!FileManager.default.fileExists(atPath: userDirPath)){
             do{
-             try NSFileManager.defaultManager().createDirectoryAtPath(userDirPath, withIntermediateDirectories: false, attributes: nil)
+             try FileManager.default.createDirectory(atPath: userDirPath, withIntermediateDirectories: false, attributes: nil)
             }catch{
                 print("create dir fail")
                 return nil
@@ -24,100 +24,100 @@ class FileUtil {
         return userDirPath
     }
     
-    static func createFile(userName : String,fileName : String) -> String{
+    static func createFile(_ userName : String,fileName : String) -> String{
         let filePath = "\(NSHomeDirectory())/Documents/\(userName)/\(fileName)"
-        if(!NSFileManager.defaultManager().fileExistsAtPath(filePath)){
-             NSFileManager.defaultManager().createFileAtPath(filePath, contents: nil, attributes: nil)
+        if(!FileManager.default.fileExists(atPath: filePath)){
+             FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
         }
         return filePath
     }
     
     /**获取用户文件夹下的所有文件**/
-    static func getFiles(userName : String) -> [String]!{
-        let userDirPath = "\(createDir(userName))/"
-        return NSFileManager.defaultManager().subpathsAtPath(userDirPath)!
+    static func getFiles(_ userName : String) -> [String]!{
+        let userDirPath = "\(createDir(userName)!)/"
+        return FileManager.default.subpaths(atPath: userDirPath)!
     }
     
-    static func read(filePath : String,userName : String) -> String!{
+    static func read(_ filePath : String,userName : String) -> String!{
         let filePath = "\(NSHomeDirectory())/Documents/\(userName)/\(filePath)"
-        if let readData = NSData(contentsOfFile: filePath){
-            return NSString(data: readData, encoding: NSUTF8StringEncoding) as! String
+        if let readData = try? Data(contentsOf: URL(fileURLWithPath: filePath)){
+            return NSString(data: readData, encoding: String.Encoding.utf8.rawValue) as! String
         }else{
             return nil
         }
     }
     
-    static func write(content : String,filePath : String){
-        let path = "\(NSHomeDirectory())/Documents/\(Zone._this.userName)/\(filePath)"
-        createFile(Zone._this.userName, fileName: filePath)
+    static func write(_ content : String,filePath : String){
+        let path = "\(NSHomeDirectory())/Documents/\(Zone._this.userName!)/\(filePath)"
+        let _ = createFile(Zone._this.userName, fileName: filePath)
         let newContent = "\(content)\(FileUtil.END)"
-        let fileHandler = NSFileHandle(forWritingAtPath: path)
+        let fileHandler = FileHandle(forWritingAtPath: path)
         fileHandler?.seekToEndOfFile()
-        fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
+        fileHandler?.write(newContent.data(using: String.Encoding.utf8)!)
         fileHandler?.closeFile()
     }
     
     
-    static func update(content : String,lineNum : Int,filePath : String){
+    static func update(_ content : String,lineNum : Int,filePath : String){
         let path = "\(NSHomeDirectory())/Documents/\(Zone._this.userName)/\(filePath)"
         let oldContent = read(filePath,userName: Zone._this.userName)
-        let modelStrList = oldContent.componentsSeparatedByString("\(FileUtil.END)")
+        let modelStrList = oldContent?.components(separatedBy: "\(FileUtil.END)")
         var newContent = ""
         var num = 0
-        for modelString in modelStrList{
+        for modelString in modelStrList!{
             num = num + 1
             if( num == lineNum){
                 newContent = "\(newContent)\(content)"
-                if num != modelStrList.count{
+                if num != modelStrList?.count{
                     newContent = "\(newContent)\(FileUtil.END)"
                 }
             }else{
                 newContent = "\(newContent)\(modelString)"
-                if num != modelStrList.count{
+                if num != modelStrList?.count{
                     newContent = "\(newContent)\(FileUtil.END)"
                 }
             }
             
         }
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(path)
+            try FileManager.default.removeItem(atPath: path)
         }catch{
             
         }
-        createFile(Zone._this.userName, fileName: filePath)
-        let fileHandler = NSFileHandle(forWritingAtPath: path)
-        fileHandler?.seekToFileOffset(0)
-        fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
+        let _ = createFile(Zone._this.userName, fileName: filePath)
+        let fileHandler = FileHandle(forWritingAtPath: path)
+        fileHandler?.seek(toFileOffset: 0)
+        fileHandler?.write(newContent.data(using: String.Encoding.utf8)!)
         fileHandler?.closeFile()
         
     }
     
     
-    static func deleteLine(lineNum : Int,filePath : String){
+    static func deleteLine(_ lineNum : Int,filePath : String){
         let path = "\(NSHomeDirectory())/Documents/\(Zone._this.userName)/\(filePath)"
         let oldContent = read(filePath,userName: Zone._this.userName)
-        var modelStrList = oldContent.componentsSeparatedByString("\(FileUtil.END)")
-        modelStrList.removeLast()
+        var modelStrList = oldContent?.components(separatedBy: "\(FileUtil.END)")
+        modelStrList?.remove(at: (modelStrList?.count)! - 1)
         var newContent = ""
         var num = 0
-        for modelString in modelStrList{
+        for modelString in modelStrList!{
             num = num + 1
             if( num != lineNum){
                 newContent = "\(newContent)\(modelString)"
-                if num != modelStrList.count{
+                if num != modelStrList?.count{
                     newContent = "\(newContent)\(FileUtil.END)"
                 }
             }
         }
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(path)
+            try FileManager.default.removeItem(atPath: path)
         }catch{
             
         }
-        createFile(Zone._this.userName, fileName: filePath)
-        let fileHandler = NSFileHandle(forWritingAtPath: path)
-        fileHandler?.seekToFileOffset(0)
-        fileHandler?.writeData(newContent.dataUsingEncoding(NSUTF8StringEncoding)!)
+        let _ = createFile(Zone._this.userName, fileName: filePath)
+        let fileHandler = FileHandle(forWritingAtPath: path)
+        fileHandler?.seek(toFileOffset: 0)
+        fileHandler?.write(newContent.data(using: String.Encoding.utf8)!)
         fileHandler?.closeFile()
         
     }

@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
     # 名称 使用的时候pod search [name] 
     s.name = "Zone" 
     # 代码库的版本 
-    s.version = "1.0.2" 
+    s.version = "1.0.3" 
     # 简介 
     s.summary = "一个Swift文件型数据库" 
     # 主页  
@@ -14,9 +14,9 @@ Pod::Spec.new do |s|
     # 代码库最低支持的版本 
     s.platform = :ios, "8.0" 
     # 代码的Clone 地址 和 tag 版本 
-    s.source = { :git => "https://github.com/yunyeLoveYoona/Zone-Swift.git", :tag => "1.0.2" } 
+    s.source = { :git => "https://github.com/yunyeLoveYoona/Zone-Swift.git", :tag => "1.0.3" } 
     # 如果使用pod 需要导入哪些资源 
-    s.source_files = "Zone-Swift/core/*.{swift}" 
+    s.source_files = "Zone-Swift/core/**"
     # 框架是否使用的ARC 
     s.requires_arc = true  
 end

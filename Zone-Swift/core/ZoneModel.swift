@@ -20,45 +20,49 @@ class ZoneModel: NSObject {
     
     func saveOrUpdate() throws{
         var isNew = false
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, yyyy 'at' h:mm:ss a"
         if self.defaultKey == nil{
-            self.defaultKey = "\(dateFormatter.stringFromDate(NSDate()))\(arc4random())"
+            self.defaultKey = "\(dateFormatter.string(from: Date()))\(arc4random())"
             isNew = true
         }
         try Zone.saveorUpdate(NSStringFromClass(classForCoder), model: self)
-        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)){
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).sync{
             let mirror = Mirror(reflecting: self)
-            let superMirror = mirror.superclassMirror()
+            let superMirror = mirror.superclassMirror
             var modelStr = ""
             for case let (label?, value) in mirror.children {
                 if var v = (value as? AnyObject){
                     if v is ZoneModelHelper{
                         var temp = (v as! ZoneModelHelper).toString()
                         temp = "\(temp)!$\(NSStringFromClass(v.classForCoder))"
-                        if temp.containsString(":"){
-                            temp = String(temp).stringByReplacingOccurrencesOfString(":", withString: "%^")
-                            temp = String(temp).stringByReplacingOccurrencesOfString(",", withString: "%&")
+                        if temp.contains(":"){
+                            temp = String(temp).replacingOccurrences(of: ":", with: "%^")
+                            temp = String(temp).replacingOccurrences(of: ",", with: "%&")
                         }
-                        modelStr = "\(modelStr)\(String(UTF8String: label)!):\(temp),"
+                        modelStr = "\(modelStr)\(String(validatingUTF8: label)!):\(temp),"
+                        
+                    }else if v is NSDate{
+                        let temp = (v as! NSDate).timeIntervalSince1970
+                        modelStr = "\(modelStr)\(String(validatingUTF8: label)!):\(temp)date,"
                         
                     }else{
-                        if String(v).containsString(":"){
-                            v = String(v).stringByReplacingOccurrencesOfString(":", withString: "%^")
-                            v = String(v).stringByReplacingOccurrencesOfString(",", withString: "%&")
+                        if String(describing: v).contains(":"){
+                            v = String(describing: v).replacingOccurrences(of: ":", with: "%^") as AnyObject
+                            v = String(describing: v).replacingOccurrences(of: ",", with: "%&") as AnyObject
                         }
-                        modelStr = "\(modelStr)\(String(UTF8String: label)!):\(String(v)),"
+                        modelStr = "\(modelStr)\(String(validatingUTF8: label)!):\(String(describing: v)),"
                     }
                     
                 }
             }
             for case let (label?, value) in superMirror!.children {
                 if var v = (value as? AnyObject){
-                    if String(v).containsString(":"){
-                        v = String(v).stringByReplacingOccurrencesOfString(":", withString: "%^")
-                        v = String(v).stringByReplacingOccurrencesOfString(",", withString: "%&")
+                    if String(describing: v).contains(":"){
+                        v = String(describing: v).replacingOccurrences(of: ":", with: "%^") as AnyObject
+                        v = String(describing: v).replacingOccurrences(of: ",", with: "%&") as AnyObject
                     }
-                    modelStr = "\(modelStr)\(String(UTF8String: label)!):\(String(v)),"
+                    modelStr = "\(modelStr)\(String(validatingUTF8: label)!):\(String(describing: v)),"
                 }
             }
             modelStr = modelStr.substring(0, NSString(string: modelStr).length - 1)
@@ -78,7 +82,7 @@ class ZoneModel: NSObject {
             return false
         }
         if try Zone.delete(NSStringFromClass(classForCoder), model: self){
-            dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)){
+            DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).sync{
                 FileUtil.deleteLine(self.lineNum, filePath:  NSStringFromClass(self.classForCoder))
             }
         }

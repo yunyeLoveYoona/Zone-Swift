@@ -26,18 +26,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        add.addTarget(self, action: #selector(ViewController.addModel), forControlEvents: UIControlEvents.TouchUpInside)
+        add.addTarget(self, action: #selector(ViewController.addModel), for: UIControlEvents.touchUpInside)
         
-        findAll.addTarget(self, action: #selector(ViewController.find), forControlEvents: UIControlEvents.TouchUpInside)
+        findAll.addTarget(self, action: #selector(ViewController.find), for: UIControlEvents.touchUpInside)
         
-        update.addTarget(self, action: #selector(ViewController.updateModel), forControlEvents: UIControlEvents.TouchUpInside)
+        update.addTarget(self, action: #selector(ViewController.updateModel), for: UIControlEvents.touchUpInside)
         
-        delete.addTarget(self, action: #selector(ViewController.deleteModel), forControlEvents: UIControlEvents.TouchUpInside)
+        delete.addTarget(self, action: #selector(ViewController.deleteModel), for: UIControlEvents.touchUpInside)
         
-        limit.addTarget(self, action: #selector(ViewController.limitModel), forControlEvents: UIControlEvents.TouchUpInside)
+        limit.addTarget(self, action: #selector(ViewController.limitModel), for: UIControlEvents.touchUpInside)
         
-        equals.addTarget(self, action: #selector(ViewController.equalsSelect), forControlEvents: UIControlEvents.TouchUpInside)
-        sort.addTarget(self, action: #selector(ViewController.sortModel), forControlEvents: UIControlEvents.TouchUpInside)
+        equals.addTarget(self, action: #selector(ViewController.equalsSelect), for: UIControlEvents.touchUpInside)
+        sort.addTarget(self, action: #selector(ViewController.sortModel), for: UIControlEvents.touchUpInside)
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         let testModel = TestModel()
         i = i + 1
         testModel.age = i * 10
-        testModel.birthday = NSDate()
+        testModel.birthday = Date()
         testModel.name = "testModel"
         testModel.model = TestModel2()
         testModel.model.money = 11
@@ -109,7 +109,7 @@ class ViewController: UIViewController {
     
     func equalsSelect(){
         do{
-            if let modelList = try Zone.selectWhere(WhereCondition.EQUALS, className: NSStringFromClass(TestModel.classForCoder()), fieldName: "name", value: "testModel"){
+            if let modelList = try Zone.selectWhere(WhereCondition.equals, className: NSStringFromClass(TestModel.classForCoder()), fieldName: "name", value: "testModel" as AnyObject){
                     msg.text = "equals查询到：\(modelList.count)"
             }
         }catch{
@@ -119,7 +119,7 @@ class ViewController: UIViewController {
     
     func sortModel() {
         do{
-            try Zone.orderBy(NSStringFromClass(TestModel.classForCoder()), sortField: "age", sordMode: SortMode.DESC)
+            try Zone.orderBy(NSStringFromClass(TestModel.classForCoder()), sortField: "age", sordMode: SortMode.desc)
         }catch{
             
         }
